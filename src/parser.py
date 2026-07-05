@@ -1,25 +1,85 @@
-"""Incident parser module.
-This module contains the IncidentParser class, which is responsible for parsing incident data from various sources.
-The IncidentParser class provides methods to parse incident data from JSON, XML, and CSV formats, and convert it into a standardized format for further processing.
-The IncidentParser class also includes error handling and validation to ensure that the parsed data is accurate and complete.
-Example usage:"""
+"""
+Incident Parser Module
+"""
+
 
 class IncidentParser:
-    """A class for parsing incident data from various sources.
 
-    This class provides methods to parse incident data from JSON, XML, and CSV formats,
-    and convert it into a standardized format for further processing.
-
-    Attributes:
-        None"""
     def __init__(self):
-        """Initializes the IncidentParser class."""
-        print("IncidentParser Initialized")
-    def parse(self, incident_text):
-        """Parses incident data from the given text."""
+        print("Incident Parser Initialized")
 
-        incident_data = {
-            "raw_text": incident_text,
-            "status": "parsed"
+    def parse(self, incident_text):
+
+        text = incident_text.lower()
+
+        keywords = []
+
+        category = "Unknown"
+
+        severity = "Low"
+
+        database_words = [
+            "database",
+            "sql",
+            "mysql",
+            "oracle",
+            "postgres",
+            "connection"
+        ]
+
+        cpu_words = [
+            "cpu",
+            "processor",
+            "utilization"
+        ]
+
+        memory_words = [
+            "memory",
+            "ram",
+            "heap"
+        ]
+
+        application_words = [
+            "application",
+            "service",
+            "api"
+        ]
+
+        # Keyword Detection
+
+        for word in database_words:
+            if word in text:
+                keywords.append(word)
+                category = "Database"
+
+        for word in cpu_words:
+            if word in text:
+                keywords.append(word)
+
+        for word in memory_words:
+            if word in text:
+                keywords.append(word)
+
+        for word in application_words:
+            if word in text:
+                keywords.append(word)
+
+        # Severity Detection
+
+        if "98%" in text or "95%" in text:
+
+            severity = "Critical"
+
+        incident = {
+
+            "category": category,
+
+            "severity": severity,
+
+            "keywords": keywords,
+
+            "status": "Analyzed"
+
         }
-        return incident_data
+
+        return incident
